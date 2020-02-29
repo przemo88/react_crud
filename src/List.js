@@ -12,7 +12,10 @@ class List extends Component {
 
         this.add = this.add.bind(this);
         this.show = this.show.bind(this);
+        this.del = this.del.bind(this);
     }
+
+
 
     add(e) {
         e.preventDefault();
@@ -32,22 +35,31 @@ class List extends Component {
             const newUser = {
                 login: this.state.login,
                 pass: this.state.pass,
-                id: this.state.id
             };
 
             this.setState(state => ({
                 data: state.data.concat(newUser),
             }))
         }
+    }
 
+    del(index) {
+        let { data } = this.state
+        data.splice(index, 1);
+        this.setState(({
+            data
+        }));
 
     }
     render() {
+
+
+
         return (
             <div>
                 <form onSubmit={this.show}>
                     <label>Login</label><br></br><input type='text' name='login' onChange={e => this.add(e)}></input><br></br>
-                    <label>Password</label><br></br><input type='text' name='pass' onChange={e => this.add(e)} ></input><br></br>
+                    <label>Password</label><br></br><input type='text' name='pass' onChange={e => this.add(e)}></input><br></br>
                     <input type="submit" value="Add"></input>
                 </form>
                 <table>
@@ -69,6 +81,7 @@ class List extends Component {
                                     <td>{val.pass}</td>
                                 </tr>
                             </tbody>
+                            <input type="submit" value='X' onClick={() => this.del(index)}></input>
                         </>
                     ))}
                 </table>
