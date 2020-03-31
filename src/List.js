@@ -55,22 +55,23 @@ class List extends Component {
     render() {
         return (
             <div>
-                <form onSubmit={this.show}>
-                    <label>Login</label>
-                    <br />
-                    <input type="text" name="login" onChange={e => this.add(e)} />
-                    <br />
-                    <label>Password</label>
-                    <br />
-                    <input type="text" name="pass" onChange={e => this.add(e)} />
-                    <br />
-                    <input type="submit" value="Add" />
-                </form>{" "}
+
                 <table>
                     <Router>
                         <div>
                             <Switch>
                                 <Route exact path="/">
+                                    <form onSubmit={this.show}>
+                                        <label>Login</label>
+                                        <br />
+                                        <input type="text" name="login" onChange={e => this.add(e)} />
+                                        <br />
+                                        <label>Password</label>
+                                        <br />
+                                        <input type="text" name="pass" onChange={e => this.add(e)} />
+                                        <br />
+                                        <input type="submit" value="Add" />
+                                    </form>{" "}
                                     {this.state.data.map((val, index) => (
                                         <>
                                             <td>{val.login}</td>
@@ -88,6 +89,7 @@ class List extends Component {
                                             <input type="submit" value="X" onClick={() => this.del(index)} />
                                         </>
                                     ))}
+
                                 </Route>
                                 <Route exact path="/:userID">
                                     <SingleUser sData={this.state.data} />
