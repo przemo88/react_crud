@@ -19,6 +19,7 @@ function SingleUser(props) {
         e.preventDefault();
         props.sData[userID].login = login;
         props.sData[userID].pass = pass;
+
     };
 
     return (
@@ -32,7 +33,7 @@ function SingleUser(props) {
                     Pass:
                 </label>
                 <input type="text" {...bindPass} />
-                <input type="submit" value="UpdateS"></input>
+                <input type="submit" value="Updates"></input>
             </form>
             <Link to="/">powrót</Link>
         </div>
