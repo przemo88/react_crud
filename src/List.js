@@ -6,15 +6,16 @@ import {
     Link
 } from "react-router-dom";
 import SingleUser from "./SingleUser";
+import style from "./Style.scss";
 
 class List extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            data: [{ login: "login", pass: "pass" }, { login: "drugi", pass: "drugi" },],
             login: "",
             pass: "",
-            chose: "",
+            find: ""
         };
 
         this.add = this.add.bind(this);
@@ -57,6 +58,7 @@ class List extends Component {
 
 
     sortBy(key, method) {
+
         function change(a, b) {
 
 
@@ -94,36 +96,41 @@ class List extends Component {
         this.setState(SortElements(this.state.data));
     }
 
-
-
+    filterUsers(e) {
+        this.setState({
+            find: e.currentTarget.value
+        });
+    }
 
     render() {
-
-
 
         return (
             <div>
 
-                <table>
-                    <Router>
-                        <div>
-                            <Switch>
-                                <Route exact path="/">
 
-                                    <form onSubmit={this.show}>
-                                        <label>Login</label>
-                                        <br />
-                                        <input type="text" name="login" onChange={e => this.add(e)} />
-                                        <br />
-                                        <label>Password</label>
-                                        <br />
-                                        <input type="text" name="pass" onChange={e => this.add(e)} />
-                                        <br />
-                                        <input type="submit" value="Add" />
-                                    </form>{" "}
+                <Router>
+                    <div>
+                        <Switch>
+                            <Route exact path="/">
 
-                                    {(this.state.data.length) ?
-                                        <div>
+
+                                <form onSubmit={this.show} className="add">
+                                    <label>Login</label>
+                                    <br />
+                                    <input type="text" name="login" onChange={e => this.add(e)} />
+                                    <br />
+                                    <label>Password</label>
+                                    <br />
+                                    <input type="text" name="pass" onChange={e => this.add(e)} />
+                                    <br />
+                                    <input type="submit" value="Add" className="btn" />
+                                </form>
+
+                                <div className="search">Search<input onInput={this.filterUsers.bind(this)} /></div>
+
+                                {(this.state.data.length && this.state.data.filter(x => x.login.includes(this.state.find)).length > 0) ?
+                                    <>
+                                        <div className="sort_option">
                                             <div onClick={() => this.sortBy("login", "asc")}>
                                                 Login ascending
                                                 </div>
@@ -136,42 +143,44 @@ class List extends Component {
                                             <div onClick={() => this.sortBy("pass", "desc")}>
                                                 Pass descending
                                                 </div>
-                                        </div> : null}
+                                        </div>
+
+
+                                        <table className="tableData">
+
+                                            <tr>
+                                                <th>Login</th>
+                                                <th>Password</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+
+                                            </tr>
 
 
 
-                                    {this.state.data.map((val, index) => (
-                                        <>
+                                            {this.state.data.filter(x => x.login.includes(this.state.find)).map((val, index) => (
+                                                <>
+                                                    <tr>
+                                                        <td>{val.login}</td>
+                                                        <td>{val.pass}</td>
+                                                        <td><Link to={`/${index}`}>click</Link></td>
+                                                        <td> <input type="submit" value="X" onClick={() => this.del(index)} /></td>
+                                                    </tr>
+                                                </>
+                                            ))}
+                                        </table>
+
+                                    </> : <div className="search">not found any users</div>}
+
+                            </Route>
+                            <Route exact path="/:userID">
+                                <SingleUser sData={this.state.data} />
+                            </Route>
+                        </Switch>
+                    </div>
+                </Router>
 
 
-
-                                            <td>{val.login}</td>
-
-                                            <td>{val.pass}</td>
-
-                                            <br />
-
-                                            <div>
-                                                <div>
-                                                    <Link to={`/${index}`}>{index}</Link>
-                                                </div>
-                                            </div>
-
-                                            <input type="submit" value="X" onClick={() => this.del(index)} />
-                                        </>
-                                    ))}
-
-
-
-                                </Route>
-                                <Route exact path="/:userID">
-                                    <SingleUser sData={this.state.data} />
-                                </Route>
-                            </Switch>
-                        </div>
-                    </Router>
-
-                </table>
             </div >
         );
     }
